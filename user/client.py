@@ -3,8 +3,8 @@ import secrets
 
 ISSUER_URL = "http://127.0.0.1:8000"
 
-def modinv(r, N):
-    return pow(r, -1, N)
+def modinv(r, n):
+    return pow(r, -1, n)
 
 def get_public_key():
     r = requests.get(f"{ISSUER_URL}/public-key")
@@ -14,16 +14,16 @@ def get_public_key():
 def generate_sn():
     return secrets.randbits(256)
 
-def blind_message(m, N, e):
+def blind_message(m, n, e):
     while True:
-        r = secrets.randbelow(N)
+        r = secrets.randbelow(n)
         if(r > 1):
             try:
-                r_inv = modinv(r, N)
+                r_inv = modinv(r, n)
                 break
             except:
                 continue
-    blinded = (m*pow(r, e, N)) % N
+    blinded = (m*pow(r, e, n)) % n
     return blinded, r, r_inv
 
 def request_signature(blinded):
@@ -34,22 +34,22 @@ def request_signature(blinded):
     data = r.json()
     return int(data["blind_signature"])
 
-def unblind(signature_blinded, r_inv, N):
-    return (signature_blinded*r_inv) % N
+def unblind(signature_blinded, r_inv, n):
+    return (signature_blinded*r_inv) % n
 
 def main():
     # 1. Obtenemos la clave pública
-    N, e = get_public_key()
+    n, e = get_public_key()
     # 2. Obtenemos el SN
-    SN = generate_sn()
+    sn = generate_sn()
     # 3. Ocultamos el mensaje
-    blinded, r, r_inv = blind_message(SN, N, e)
+    blinded, r, r_inv = blind_message(sn, n, e)
     # 4. Enviamos el mensaje a cifrar
     signature_blinded = request_signature(blinded)
     # 5. Desocultamos la firma
-    signature = unblind(signature_blinded, r_inv, N)
+    signature = unblind(signature_blinded, r_inv, n)
     
-    print("SN:", SN)
+    print("SN:", sn)
     print("SIGNATURE:", signature)
 
 if __name__ == "__main__":
