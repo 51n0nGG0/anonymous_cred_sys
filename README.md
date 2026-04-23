@@ -23,7 +23,7 @@ Anonymous Credential System is a privacy-preserving authentication system that d
 
 Traditional authentication systems require users to reveal their identity (username, email, account, or personal data) in order to access a service. This project explores an alternative model: proving authorization without revealing identity.
 
-The system implements a full end-to-end workflow in which an issuer signs user credentials without learning their contents, allowing users to later authenticate anonymously to protected services.
+The system implements a complete end-to-end workflow in which an issuer signs user credentials without learning their contents, allowing users to later authenticate anonymously to protected services using only a signed serial number.
 
 ## ©️ License
 
