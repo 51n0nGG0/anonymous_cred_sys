@@ -9,3 +9,7 @@ class BlindSignResponse(BaseModel):
 class PublicKeyResponse(BaseModel):
     N: str
     E: str
+    
+class VerifyRequest(BaseModel):
+    sn: str
+    signature: str
